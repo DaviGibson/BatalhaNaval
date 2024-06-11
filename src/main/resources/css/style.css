@@ -1,0 +1,29 @@
+
+.anchor-pane{
+    -fx-background-color: #B9D9EB;
+}
+
+
+/* Define estilos comuns para o grid */
+.grid-pane {
+    -fx-border-color: black;
+    -fx-border-width: 2px;
+}
+
+/* Estilos para células */
+.cell {
+    -fx-border-color: black;
+    -fx-background-color: #002D62;
+    -fx-pref-height: 30px;
+    -fx-pref-width: 30px;
+}
+
+/* Célula do jogador */
+.cell-player {
+    -fx-background-color: green;
+}
+
+/* Célula do computador */
+.cell-computer {
+    -fx-background-color: red;
+}
