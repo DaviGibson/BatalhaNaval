@@ -66,5 +66,9 @@ public class Board {
     public List<Ship> getShips() {
         return ships;
     }
+
+    public int getNumShips() {
+        return numShips;
+    }
 }
 

@@ -1,5 +1,6 @@
 package br.ufrn.imd.visao;
 
+import br.ufrn.imd.modelo.Board;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -24,7 +25,7 @@ public class Controller {
     private GridPane computerGrid;
 
     @FXML
-    private Button startButton;
+    private Button startGameButton;
 
     @FXML
     private Button resetButton;
@@ -32,11 +33,25 @@ public class Controller {
     @FXML
     private Label label;
 
+    private Board board;
+
+    public Controller() {
+        board = new Board();
+    }
+
     @FXML
     public void initialize() {
         gamePane.setStyle("-fx-background-color: #B9D9EB;");
         createGrid(playerGrid,"jogador");
         createGrid(computerGrid, "computador");
+        startGameButton.setOnAction(event -> handleStartGame());
+    }
+
+    private void handleStartGame(){
+        if (board.getNumShips() == 4){
+            label.setText("Iniciando jogo...");
+        }
+        else label.setText("Voce ainda nao posicionou todos os navios!!!");
     }
 
     private void createGrid(GridPane grid, String gridType) {
