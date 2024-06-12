@@ -20,9 +20,8 @@ public class CellButton {
     public void hit() {
         if (!isHit) {
             isHit = true;
-            if (state == State.SHIP) {
-                state = State.HIT;
-            }
+            state = State.HIT;
+            //colocar retorno caso atinja um lugar que
         }
     }
     public void reset() {

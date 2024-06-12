@@ -47,11 +47,11 @@ public class Controller {
                 // Adiciona classe própria da célula
                 cell.getStyleClass().add("cell");
                 // Adiciona classes CSS específicas
-                if (gridType.equals("player")) {
-                    cell.getStyleClass().add("cell-player");
-                } else if (gridType.equals("computer")) {
-                    cell.getStyleClass().add("cell-computer");
-                }
+//                if (gridType.equals("player")) {
+//                    cell.getStyleClass().add("cell-player");
+//                } else if (gridType.equals("computer")) {
+//                    cell.getStyleClass().add("cell-computer");
+//                }
 
                 grid.add(cell, col, row);
                 cell.setOnMouseClicked(event -> handleCellClick(event, gridType));

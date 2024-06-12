@@ -20,17 +20,19 @@ public class Ship {
             cell.setState(CellButton.State.SHIP);
         }
     }
-
-    public void hit() {
+// talvez mudar pro tabuleiro
+    public boolean isAlive() {
         int cellsHit = 0;
         for (CellButton cell : position) {
             if (cell.getState() == CellButton.State.SHIP && cell.isHit()) {
                 cellsHit += 1;
             }
-            if (cellsHit == position.size()){
-                isSunk = true;
-            }
         }
+        if (cellsHit == position.size()){
+            isSunk = true;
+            return false;
+        }
+        return true;
     }
 
     public boolean isSunk() {
