@@ -12,8 +12,8 @@ public class Player {
         this.ships = new ArrayList<>();
     }
 
-    public void placeShip(Ship ship, List<CellButton> position) {
-        board.placeShip(ship, position);
+    public void placeShip(Ship ship, CellButton cellIni) {
+        board.placeShip(ship, cellIni);
         ships.add(ship);
     }
 

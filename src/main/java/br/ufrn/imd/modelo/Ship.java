@@ -3,19 +3,17 @@ package br.ufrn.imd.modelo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Ship {
-    private int size;
-    private List<CellButton> position;
-    private boolean isSunk;
+public abstract class Ship {
+    protected int size;
+    protected List<CellButton> position;
+    protected boolean isSunk;
 
-    public Ship(int size) {
-        this.size = size;
+    public Ship() {
         this.position = new ArrayList<>();
         this.isSunk = false;
     }
 
-    public void place(List<CellButton> position) {
-        this.position = position;
+    public void place() {
         for (CellButton cell : position) {
             cell.setState(CellButton.State.SHIP);
         }

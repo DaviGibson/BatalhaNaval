@@ -18,9 +18,33 @@ public class Board {
             }
         }
     }
+    // ideia: receber uma celula com o click do mouse, e passar a posição dela e das "size" celulas adiante
+    public void placeShip(Ship ship, CellButton cellIni) {
 
-    public void placeShip(Ship ship, List<CellButton> position) {
-        ship.place(position);
+        if (ship instanceof Corvette corvette) {
+            //agora posso usar coisas especificas do tipo corvette
+            for(int i = 0; i < corvette.getSize(); i++){
+                corvette.position.add(getCell(cellIni.getRow() +i, cellIni.getCol() + i));
+                //pode acessar e modificar os metodos sem gets e sets, a forma de acessar position n parece certa
+            }
+        }
+        if (ship instanceof Submarine submarine) {
+            for (int i = 0; i < submarine.getSize(); i++) {
+                submarine.position.add(getCell(cellIni.getRow() + i, cellIni.getCol() + i));
+            }
+        }
+        if (ship instanceof Frigate frigate) {
+            for(int i = 0; i < frigate.getSize(); i++){
+                frigate.position.add(getCell(cellIni.getRow() +i, cellIni.getCol() + i));
+            }
+        }
+        if (ship instanceof Destroyer destroyer) {
+            for(int i = 0; i < destroyer.getSize(); i++){
+                destroyer.position.add(getCell(cellIni.getRow() +i, cellIni.getCol() + i));
+            }
+        }
+        ship.place();
+        // ver se opera com o casting em cada if ou aq msm
         ships.add(ship);
         numShips++;
     }
