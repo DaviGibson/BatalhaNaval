@@ -21,7 +21,7 @@ public class Board {
     // ideia: receber uma celula com o click do mouse, e passar a posição dela e das "size" celulas adiante
     public void placeShip(Ship ship, CellButton cellIni) {
 
-        if (ship instanceof Corvette corvette) {
+        /*if (ship instanceof Corvette corvette) {
             //agora posso usar coisas especificas do tipo corvette
             for(int i = 0; i < corvette.getSize(); i++){
                 corvette.position.add(getCell(cellIni.getRow() +i, cellIni.getCol() + i));
@@ -42,7 +42,7 @@ public class Board {
             for(int i = 0; i < destroyer.getSize(); i++){
                 destroyer.position.add(getCell(cellIni.getRow() +i, cellIni.getCol() + i));
             }
-        }
+        }*/
         ship.place();
         // ver se opera com o casting em cada if ou aq msm
         ships.add(ship);

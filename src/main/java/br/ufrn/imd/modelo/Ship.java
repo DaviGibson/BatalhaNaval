@@ -1,5 +1,7 @@
 package br.ufrn.imd.modelo;
 
+import br.ufrn.imd.controle.CelulaInvalidaException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,9 +15,12 @@ public abstract class Ship {
         this.isSunk = false;
     }
 
+
+    // Possíveis exceções aqui: navio em cima de navio e navio fora do mapa
     public void place() {
         for (CellButton cell : position) {
             cell.setState(CellButton.State.SHIP);
+
         }
     }
 // talvez mudar pro tabuleiro
@@ -44,5 +49,11 @@ public abstract class Ship {
     public List<CellButton> getPosition() {
         return position;
     }
+
+    public void setPosition(List<CellButton> position) {
+        this.position = position;
+    }
+
+    abstract public List<CellButton> attack(int row, int col);
 }
 

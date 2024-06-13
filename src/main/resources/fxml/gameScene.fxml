@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="gamePane" prefHeight="800.0" prefWidth="850.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.ufrn.imd.visao.Controller">
+<AnchorPane fx:id="gamePane" prefHeight="800.0" prefWidth="850.0" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="br.ufrn.imd.controle.Controller">
 
     <GridPane fx:id="playerGrid" gridLinesVisible="true" layoutX="50" layoutY="50">
         <!-- Conteúdo dinâmico será carregado pelo Controller -->
@@ -14,10 +14,10 @@
     <GridPane fx:id="computerGrid" gridLinesVisible="true" layoutX="500" layoutY="50">
         <!-- Conteúdo dinâmico será carregado pelo Controller -->
     </GridPane>
-    <Button fx:id="corveta" layoutX="192.0" layoutY="419.0" prefHeight="30.0" prefWidth="60.0" text="Corveta" />
-    <Button fx:id="submarino" layoutX="274.0" layoutY="419.0" prefHeight="30.0" prefWidth="90.0" text="Submarino" />
-   <Button fx:id="fragata" layoutX="392.0" layoutY="419.0" prefHeight="30.0" prefWidth="120.0" text="Fragata" />
-   <Button fx:id="destroyer" layoutX="540.0" layoutY="419.0" prefHeight="30.0" prefWidth="150.0" text="Destroyer" />
+    <Button fx:id="corveta" onAction="#posicionarCorveta" layoutX="192.0" layoutY="419.0" prefHeight="30.0" prefWidth="60.0" text="Corveta" />
+    <Button fx:id="submarino" onAction="#posicionarSubmarino" layoutX="274.0" layoutY="419.0" prefHeight="30.0" prefWidth="90.0" text="Submarino" />
+   <Button fx:id="fragata" onAction="#posicionarFragata" layoutX="392.0" layoutY="419.0" prefHeight="30.0" prefWidth="120.0" text="Fragata" />
+   <Button fx:id="destroyer" onAction="#posicionarDestroyer" layoutX="540.0" layoutY="419.0" prefHeight="30.0" prefWidth="150.0" text="Destroyer" />
    <Label fx:id="label" layoutX="175.0" layoutY="526.0" prefHeight="60.0" prefWidth="554.0" text="Bem vindo ao Batalha Naval&#10; Clique nos navios para posicioná-los, e em seguida clique em Começar Jogo" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS">
       <font>
          <Font name="Arial" size="15.0" />

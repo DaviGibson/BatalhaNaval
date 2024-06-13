@@ -1,10 +1,13 @@
 package br.ufrn.imd.modelo;
 
+import javafx.scene.Node;
+
 public class CellButton {
     private int row;
     private int col;
     private State state;
     private boolean isHit;
+    private Node node;
 
     public enum State {
         WATER, SHIP, HIT
@@ -21,9 +24,9 @@ public class CellButton {
         if (!isHit) {
             isHit = true;
             state = State.HIT;
-            //colocar retorno caso atinja um lugar que
         }
     }
+
     public void reset() {
         state = State.WATER;
         isHit = false;
@@ -41,12 +44,20 @@ public class CellButton {
         return isHit;
     }
 
-    // Getters for row and col
     public int getRow() {
         return row;
     }
 
     public int getCol() {
         return col;
+    }
+
+    // Adicionando Node associado
+    public Node getNode() {
+        return node;
+    }
+
+    public void setNode(Node node) {
+        this.node = node;
     }
 }
