@@ -173,8 +173,8 @@ public class Controller {
                     sucessoPosicao = adicionarPosicoesNavio(celIni, posicoesNavio, 3); // Corveta tem tamanho 2
                     try {
                         if (sucessoPosicao){
-                            Ship corveta = new Corvette(posicoesNavio);
-                            game.getPlayer1().placeShip(corveta, celIni);
+                            Ship submarino = new Submarine(posicoesNavio);
+                            game.getPlayer1().placeShip(submarino, celIni);
                             //fazerPintura(posicoesNavio);
                             updateBoard(board1);
                         }
@@ -191,8 +191,8 @@ public class Controller {
                     sucessoPosicao = adicionarPosicoesNavio(celIni, posicoesNavio, 4); // Corveta tem tamanho 2
                     try {
                         if (sucessoPosicao){
-                            Ship corveta = new Corvette(posicoesNavio);
-                            game.getPlayer1().placeShip(corveta, celIni);
+                            Ship fragata = new Frigate(posicoesNavio);
+                            game.getPlayer1().placeShip(fragata, celIni);
                             //fazerPintura(posicoesNavio);
                             updateBoard(board1);
                         }
@@ -209,8 +209,8 @@ public class Controller {
                     sucessoPosicao = adicionarPosicoesNavio(celIni, posicoesNavio, 5); // Corveta tem tamanho 2
                     try {
                         if (sucessoPosicao){
-                            Ship corveta = new Corvette(posicoesNavio);
-                            game.getPlayer1().placeShip(corveta, celIni);
+                            Ship destroyer = new Destroyer(posicoesNavio);
+                            game.getPlayer1().placeShip(destroyer, celIni);
                             //fazerPintura(posicoesNavio);
                             updateBoard(board1);
                         }
@@ -262,7 +262,7 @@ public class Controller {
     }
 
     public void handleCorveta(){
-        if (estado.equals("posicionarCorveta")){
+        if (estado.equals("clique")){
             boolean posicionado = false;
             for (Ship c : game.getPlayer1().getShips()){
                 if (c instanceof Corvette){
@@ -282,7 +282,7 @@ public class Controller {
         }
     }
     public void handleSubmarino(){
-        if (estado.equals("posicionarSubmarino")){
+        if (estado.equals("clique")){
             boolean posicionado = false;
             for (Ship c : game.getPlayer1().getShips()){
                 if (c instanceof Submarine){
@@ -302,7 +302,7 @@ public class Controller {
         }
     }
     public void handleFragata(){
-        if (estado.equals("posicionarFragata")){
+        if (estado.equals("clique")){
             boolean posicionado = false;
             for (Ship c : game.getPlayer1().getShips()){
                 if (c instanceof Frigate){
@@ -322,7 +322,7 @@ public class Controller {
         }
     }
     public void handleDestroyer(){
-        if (estado.equals("posicionarDestroyer")){
+        if (estado.equals("clique")){
             updateLabel("Posicione seu Destroyer");
             estado = "posicionarDestroyer";
             boolean posicionado = false;

@@ -14,7 +14,6 @@ public class Corvette extends Ship{
 
     public Corvette(List<CellButton> posicoes) throws CelulaInvalidaException {
         super();
-        boolean controle;
         for (CellButton cell : posicoes) {
             if (cell.getState() == CellButton.State.SHIP){
                 throw new CelulaInvalidaException("Você tentou posicionar um navio numa célula onde outro navio já ocupa");
