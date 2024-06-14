@@ -10,7 +10,7 @@ public class CellButton {
     private Node node;
 
     public enum State {
-        WATER, SHIP, HIT
+        WATER, SHIP, HIT, AIMED
     }
 
     public CellButton(int row, int col) {

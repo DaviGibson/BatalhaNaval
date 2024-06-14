@@ -36,3 +36,7 @@
 .cell-hit{
     -fx-fill: red;
 }
+
+.cell-aimed{
+    -fx-fill: white;
+}
