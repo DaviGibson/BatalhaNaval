@@ -242,7 +242,7 @@ public class Controller {
     }
 
     //gerencia os usos do botão Destroyer (posicioná-lo e atacar com ele)
-    public void handleCorveta(){
+    public void handleCorveta() throws InterruptedException {
         if (estado.equals("clique")){
             boolean posicionado = false;
             for (Ship c : game.getPlayer1().getShips()){
@@ -252,6 +252,7 @@ public class Controller {
             }
 
             if (!posicionado){
+                Thread.sleep(3000);
                 updateLabel("Posicione sua Corveta");
                 estado = "posicionarCorveta";
             } else {

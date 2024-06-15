@@ -49,6 +49,7 @@ public class Board {
         numShips++;
     }
 
+    //Inútil por agora
     public void hitCell(int row, int col) {
         CellButton cell = cells[row][col];
         cell.hit();
