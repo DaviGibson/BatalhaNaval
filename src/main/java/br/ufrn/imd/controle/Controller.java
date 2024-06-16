@@ -366,41 +366,36 @@ public class Controller {
         if (estado.equals("selecionarAlvos")){
             int naviosVivos = game.getPlayer1().getShips().size();
             int naviosMirados = 0;
+            Board boardComputer = game.getPlayer2().getBoard();
 
             if (!alvosMiradosCorveta.isEmpty()){naviosMirados++;}
             if (!alvosMiradosSubmarino.isEmpty()){naviosMirados++;}
             if (!alvosMiradosFragata.isEmpty()){naviosMirados++;}
             if (!alvosMiradosDestroyer.isEmpty()){naviosMirados++;}
 
-            Board boardComputer = game.getPlayer2().getBoard();
 
             if (naviosVivos == naviosMirados){ // Verifica se todos navios vivos miraram
-                if (!alvosMiradosCorveta.isEmpty()){
-                    for (CellButton c : alvosMiradosCorveta){
-                        boardComputer.getCell(c.getRow(), c.getCol()).hit();
-                    }
-                    alvosMiradosCorveta.clear();
-                }
-                if (!alvosMiradosSubmarino.isEmpty()){
-                    for (CellButton c : alvosMiradosSubmarino){
-                        boardComputer.getCell(c.getRow(), c.getCol()).hit();
-                    }
-                    alvosMiradosSubmarino.clear();
-                }
-                if (!alvosMiradosFragata.isEmpty()){
-                    for (CellButton c : alvosMiradosFragata){
-                        boardComputer.getCell(c.getRow(), c.getCol()).hit();
-                    }
-                    alvosMiradosFragata.clear();
-                }
-                if (!alvosMiradosDestroyer.isEmpty()){
-                    for (CellButton c : alvosMiradosDestroyer){
-                        boardComputer.getCell(c.getRow(), c.getCol()).hit();
-                    }
-                    alvosMiradosDestroyer.clear();
-                }
+                List<Ship> playerShips = game.getPlayer1().getShips();
+                System.out.println("mirou com todos navios e vc tem " + playerShips.size() + "navios");
 
+
+                atiraMirados(boardComputer);
                 updateBoard(boardComputer);
+
+                // Lógica para dar a dica de posição seria por aqui
+
+
+                updateLabel("Você atirou no campo inimigo");
+                System.out.println("Você atirou no campo inimigo");
+
+                alvosMiradosCorveta.clear();
+                alvosMiradosSubmarino.clear();
+                alvosMiradosFragata.clear();
+                alvosMiradosDestroyer.clear();
+
+                // lógica para o COMPUTADOR ATIRAR ficaria aq se pa
+
+
             } else {
                 updateLabel("Você ainda não mirou com algum navio");
             }
@@ -616,39 +611,62 @@ public class Controller {
         }
     }
 
+    private void atiraMirados(Board b){
+        for (int row = 0; row < 10; row++) {
+            for (int col = 0; col < 10; col++) {
+                CellButton cell = b.getCell(row, col);
+                if (cell.getAimed()){
+                    cell.setAimed(false);
+                    cell.hit();
+                    System.out.println("ATIRAMIRADOS Célula x: " + cell.getCol() + " y: " + cell.getRow() + " Estado: " + cell.getState() + " isHit(): " + cell.isHit());
+                }
+            }
+        }
+    }
 
     //Corrige alguns erros e também é responsável por pintar as células de um Board recebido no parâmetro
     private void updateBoard(Board b) {
         for (int row = 0; row < 10; row++) {
             for (int col = 0; col < 10; col++) {
                 CellButton cell = b.getCell(row, col);
-                if (cell.getState() == CellButton.State.SHIP && cell.getAimed() == false){
-                    Node cellNode = cell.getNode();
-                    if (cellNode != null) {
-                        cellNode.getStyleClass().add("cell-ship");
-                    }
-                } else if(cell.getState() == CellButton.State.HIT){
-                    Node cellNode = cell.getNode();
-                    if (cellNode != null) {
-                        cellNode.getStyleClass().add("cell-hit");
-                        cellNode.getStyleClass().remove("cell-ship");
-                        cellNode.getStyleClass().remove("cell-aimed");
-                    }
-                } else if(cell.getAimed() == true){
-                    Node cellNode = cell.getNode();
-                    if (cellNode != null) {
-                        cellNode.getStyleClass().remove("cell-ship");
-                        cellNode.getStyleClass().remove("cell-hit");
+                Node cellNode = cell.getNode();
+
+                if (cellNode != null) {
+                    cellNode.getStyleClass().removeAll("cell-ship", "cell-hit", "cell-aimed", "cell-ship-hit");
+
+                    if (cell.getAimed()){
                         cellNode.getStyleClass().add("cell-aimed");
+                    } else {
+                        if (cell.getState() == CellButton.State.SHIP){
+                            cellNode.getStyleClass().add("cell-ship");
+                        }
                     }
-                } else {
-                    Node cellNode = cell.getNode();
-                    if (cellNode != null) {
-                        cellNode.getStyleClass().remove("cell-ship");
-                        cellNode.getStyleClass().remove("cell-hit");
-                        cellNode.getStyleClass().remove("cell-aimed");
+
+                    if (cell.isHit()){
+                        if (cell.getState() == CellButton.State.SHIP){
+                            System.out.println("UPDATEBOARD Célula x: " + cell.getCol() + " y: " + cell.getRow() + " Estado: " + cell.getState() + " isHit(): " + cell.isHit());
+                            cellNode.getStyleClass().add("cell-ship-hit");
+                            //cell.setState(CellButton.State.HIT);
+                        } else if (cell.getState() == CellButton.State.WATER) {
+                            System.out.println("UPDATEBOARD Célula x: " + cell.getCol() + " y: " + cell.getRow() + " Estado: " + cell.getState() + " isHit(): " + cell.isHit());
+                            cellNode.getStyleClass().add("cell-hit");
+                            //cell.setState(CellButton.State.HIT);
+                        }
                     }
-                    cell.reset();
+
+                    /*if (cell.getState() == CellButton.State.SHIP && !cell.getAimed()) {
+                        cellNode.getStyleClass().add("cell-ship");
+                    } else if (cell.getState() == CellButton.State.WATER && cell.isHit()) {
+                        System.out.println("UPDATEBOARD Célula x: " + cell.getCol() + " y: " + cell.getRow() + " Estado: " + cell.getState() + " isHit(): " + cell.isHit());
+                        cellNode.getStyleClass().add("cell-hit");
+                        cell.setState(CellButton.State.HIT);
+                    } else if (cell.getState() == CellButton.State.SHIP && cell.isHit()) {
+                        System.out.println("UPDATEBOARD Célula x: " + cell.getCol() + " y: " + cell.getRow() + " Estado: " + cell.getState() + " isHit(): " + cell.isHit());
+                        cellNode.getStyleClass().add("cell-ship-hit");
+                        cell.setState(CellButton.State.HIT);
+                    } else if (cell.getAimed()) {
+                        cellNode.getStyleClass().add("cell-aimed");
+                    }*/
                 }
             }
         }

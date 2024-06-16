@@ -26,7 +26,6 @@ public class CellButton {
     public void hit() {
         if (!isHit) {
             isHit = true;
-            state = State.HIT;
         }
     }
 

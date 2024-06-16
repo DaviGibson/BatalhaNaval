@@ -34,7 +34,11 @@
 }
 
 .cell-hit{
-    -fx-fill: red;
+    -fx-fill: #F2751E;
+}
+
+.cell-ship-hit{
+    -fx-fill: #FF0E0E;
 }
 
 .cell-aimed{
