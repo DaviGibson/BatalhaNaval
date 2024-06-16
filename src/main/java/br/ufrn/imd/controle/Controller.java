@@ -3,21 +3,16 @@ package br.ufrn.imd.controle;
 import br.ufrn.imd.modelo.*;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
-import javafx.scene.control.Cell;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-import br.ufrn.imd.visao.*;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Controller {
 
@@ -67,7 +62,13 @@ public class Controller {
         createGrid(computerGrid, "computador");
 
 
-        startGameButton.setOnAction(event -> handleStartGame());
+        startGameButton.setOnAction(event -> {
+            try {
+                handleStartGame();
+            } catch (CelulaInvalidaException e) {
+                throw new RuntimeException(e);
+            }
+        });
 
         //evento de clique com o botão direito no gamePane
         gamePane.setOnMousePressed(event -> {
@@ -252,7 +253,7 @@ public class Controller {
             }
 
             if (!posicionado){
-                Thread.sleep(3000);
+                //Thread.sleep(3000);
                 updateLabel("Posicione sua Corveta");
                 estado = "posicionarCorveta";
             } else {
@@ -333,16 +334,54 @@ public class Controller {
     }
 
     //gerencia o uso do botão Começar Jogo!!
-    private void handleStartGame(){
+    private void handleStartGame() throws CelulaInvalidaException {
         if (game.getPlayer1().getShips().size() == 4){
             //posicionar navios do computador
+            if(game.getPlayer2().getShips().size() < 4) {
+                posicionaComputador();
+            }
+
             estado = "selecionarAlvos";
             label.setText("É o seu turno, faça seu(s) ataque(s)");
+
 
         }
         else label.setText("Voce ainda nao posicionou todos os navios!!!");
 
     }
+
+    private void posicionaComputador() throws CelulaInvalidaException {
+        for (int i = 2; i < 6; i++) {
+            posicionaNaviosPc(i);
+        }
+
+    }
+
+    private void posicionaNaviosPc(int tamanho) throws CelulaInvalidaException {
+        Random random = new Random();
+        int virado = random.nextInt(tamanho);
+
+
+        boolean sucessoPosicao;
+        List<CellButton> posicoesNavio = new ArrayList();
+        System.out.println("aaaaa");
+        sucessoPosicao = adicionarPosicoesNavioPc(posicoesNavio, tamanho, virado);
+        try{
+            if (sucessoPosicao){
+                Ship ship = new Corvette(posicoesNavio);
+                game.getPlayer2().getBoard().placeShip(ship, posicoesNavio.get(0));
+                game.getPlayer2().getShips().add(ship);
+                updateBoard(game.getPlayer2().getBoard());
+
+            }
+        } catch (CelulaInvalidaException e){
+            updateLabel(e.getMessage());
+            System.out.println(e.getMessage());
+        }
+    }
+
+
+
 
 
     //Seleciona e demarca no mapa os alvos MIRADOS de um navio específico, procedimento necessário antes de atirar
@@ -390,6 +429,45 @@ public class Controller {
         }
     }
 
+
+    private boolean adicionarPosicoesNavioPc(List<CellButton> posicoesNavio, int tamanho, int virado) {
+        Random random = new Random();
+
+        while (true) {
+            int fileira = random.nextInt(10);
+            int coluna = random.nextInt(10);
+
+            boolean posicaoValida = true;
+            posicoesNavio.clear();
+
+            if (virado == 0) {
+                for (int i = 1; i <= tamanho; i++) {
+                    if ((coluna + i) >= 10 || game.getPlayer2().getBoard().getCell(fileira, coluna + i).getState() == CellButton.State.SHIP) {
+                        posicaoValida = false;
+                        break;
+                    } else {
+                        CellButton celulaAdjacente = game.getPlayer2().getBoard().getCell(fileira, coluna + i);
+                        posicoesNavio.add(celulaAdjacente);
+                    }
+                }
+            } else {
+                for (int i = 1; i <= tamanho; i++) {
+                    if ((fileira + i) >= 10 || game.getPlayer2().getBoard().getCell(fileira + i, coluna).getState() == CellButton.State.SHIP) {
+                        posicaoValida = false;
+                        break;
+                    } else {
+                        CellButton celulaAdjacente = game.getPlayer2().getBoard().getCell(fileira + i, coluna);
+                        posicoesNavio.add(celulaAdjacente);
+                    }
+                }
+            }
+
+            if (posicaoValida) {
+                return true;
+            }
+        }
+    }
+
     // Adiciona coordenadas de células necessárias para definir (inicializar) um navio específico
     private boolean adicionarPosicoesNavio(CellButton celIni, List<CellButton> posicoesNavio, int tamanho) {
         int fileira = celIni.getRow();
@@ -428,6 +506,9 @@ public class Controller {
         }
         return true;
     }
+
+
+
 
 
     // Atualmente inútil
