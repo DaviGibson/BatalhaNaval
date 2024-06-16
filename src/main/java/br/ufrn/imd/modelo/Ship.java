@@ -50,8 +50,23 @@ public abstract class Ship {
         return position;
     }
 
-    public void setPosition(List<CellButton> position) {
-        this.position = position;
+    public void setPosition(List<CellButton> position) throws CelulaInvalidaException {
+        int sucessos = 0;
+        for (CellButton cell : position) {
+            if (cell.getState() == CellButton.State.SHIP){
+                //System.out.println("a célula fileira:" + cell.getRow() + " e coluna:" + cell.getCol() + " deu erro");
+                throw new CelulaInvalidaException("Você tentou posicionar um navio numa célula onde outro navio já ocupa");
+            } else {
+                //System.out.println("a célula fileira:" + cell.getRow() + " e coluna:" + cell.getCol() + " deu bom");
+                sucessos++;
+            }
+        }
+        if (sucessos == size){
+            this.position = position;
+            for (CellButton c : position){
+                c.setState(CellButton.State.SHIP);
+            }
+        }
     }
 
     abstract public List<CellButton> attack(int row, int col);

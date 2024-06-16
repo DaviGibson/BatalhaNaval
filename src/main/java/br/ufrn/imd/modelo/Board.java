@@ -61,7 +61,12 @@ public class Board {
     }
 
     public CellButton getCell(int row, int col) {
-        return cells[row][col];
+
+        if (row > 10 || col > 10 || row < 0 || col < 0){
+            throw new ArrayIndexOutOfBoundsException("Você mirou numa célula fora do alcance do tabuleiro");
+        } else {
+            return cells[row][col];
+        }
     }
 
     public List<Ship> getShips() {

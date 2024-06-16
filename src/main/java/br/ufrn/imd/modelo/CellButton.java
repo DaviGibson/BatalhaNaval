@@ -7,10 +7,12 @@ public class CellButton {
     private int col;
     private State state;
     private boolean isHit;
+
+    private boolean isAimed;
     private Node node;
 
     public enum State {
-        WATER, SHIP, HIT, AIMED
+        WATER, SHIP, HIT
     }
 
     public CellButton(int row, int col) {
@@ -18,6 +20,7 @@ public class CellButton {
         this.col = col;
         this.state = State.WATER;
         this.isHit = false;
+        this.isAimed = false;
     }
 
     public void hit() {
@@ -42,6 +45,14 @@ public class CellButton {
 
     public boolean isHit() {
         return isHit;
+    }
+
+    public void setAimed(boolean b){
+        isAimed = b;
+    }
+
+    public boolean getAimed(){
+        return isAimed;
     }
 
     public int getRow() {
