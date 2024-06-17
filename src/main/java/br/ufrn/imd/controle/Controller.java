@@ -10,6 +10,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Rectangle;
 
+import java.beans.beancontext.BeanContextChild;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -394,12 +395,34 @@ public class Controller {
                 alvosMiradosDestroyer.clear();
 
                 // lógica para o COMPUTADOR ATIRAR ficaria aq se pa
+                ataquePc();
+
 
 
             } else {
                 updateLabel("Você ainda não mirou com algum navio");
             }
 
+        }
+    }
+    private void ataquePc(){
+        Board board = game.getPlayer1().getBoard();
+        int quantosNavios = game.getPlayer2().getShips().size();
+
+        List<CellButton> cells;
+        cells = new ArrayList<>();
+
+        for(int i = 0; i < quantosNavios; i++){
+            Random random = new Random();
+
+            int fileira = random.nextInt(10);
+            int coluna = random.nextInt(10);
+
+            cells = game.getPlayer2().getShips().get(i).attack(fileira,coluna);
+            for (CellButton c : cells){
+                board.hitCell(c.getRow(),c.getCol());
+            }
+            updateBoard(board);
         }
     }
     //gerencia o uso do botão Começar Jogo!!
@@ -437,10 +460,29 @@ public class Controller {
         sucessoPosicao = adicionarPosicoesNavioPc(posicoesNavio, tamanho, virado);
         try{
             if (sucessoPosicao){
-                Ship ship = new Corvette(posicoesNavio);
-                game.getPlayer2().getBoard().placeShip(ship, posicoesNavio.get(0));
-                game.getPlayer2().getShips().add(ship);
-                updateBoard(game.getPlayer2().getBoard());
+                switch (tamanho) {
+                    case 2:
+                        Ship ship1 = new Corvette(posicoesNavio);
+                        game.getPlayer2().getBoard().placeShip(ship1, posicoesNavio.get(0));
+                        game.getPlayer2().getShips().add(ship1);
+                        updateBoard(game.getPlayer2().getBoard());
+                    case 3:
+                        Ship ship2 = new Submarine(posicoesNavio);
+                        game.getPlayer2().getBoard().placeShip(ship2, posicoesNavio.get(0));
+                        game.getPlayer2().getShips().add(ship2);
+                        updateBoard(game.getPlayer2().getBoard());
+                    case 4:
+                        Ship ship3 = new Frigate(posicoesNavio);
+                        game.getPlayer2().getBoard().placeShip(ship3, posicoesNavio.get(0));
+                        game.getPlayer2().getShips().add(ship3);
+                        updateBoard(game.getPlayer2().getBoard());
+                    case 5:
+                        Ship ship4 = new Destroyer(posicoesNavio);
+                        game.getPlayer2().getBoard().placeShip(ship4, posicoesNavio.get(0));
+                        game.getPlayer2().getShips().add(ship4);
+                        updateBoard(game.getPlayer2().getBoard());
+
+                }
 
             }
         } catch (CelulaInvalidaException e){
