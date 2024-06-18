@@ -29,6 +29,7 @@ public abstract class Ship {
         for (CellButton cell : position) {
             if (cell.isHit()) {
                 cellsHit += 1;
+                System.out.println("Celula " + cell.getCol() + " " + cell.getRow() + " Atingida: " + cell.isHit());
             }
         }
         if (cellsHit == position.size()) {

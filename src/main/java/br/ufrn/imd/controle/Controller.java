@@ -32,10 +32,11 @@ public class Controller {
     private Button corveta;
 
 
-    private Board board;
     private Game game;
     private String estado;
     private boolean deitado;
+
+    private String vencedor;
 
     //Variáveis para o posicionamento dos alvos mirados pelo jogador
     private List<CellButton> alvosMiradosCorveta;
@@ -47,7 +48,6 @@ public class Controller {
 
 
     public Controller() {
-        board = new Board();
         game = new Game();
         estado = "clique";
         deitado = true;
@@ -55,6 +55,7 @@ public class Controller {
         alvosMiradosSubmarino = new ArrayList<>();
         alvosMiradosFragata = new ArrayList<>();
         alvosMiradosDestroyer = new ArrayList<>();
+        vencedor = "ninguem";
     }
     @FXML
     public void initialize() {
@@ -154,6 +155,7 @@ public class Controller {
                         if (sucessoPosicao){
                             corveta.setPosition(posicoesNavio); //posiciona um navio, alterando seu State de WATER para SHIP
                             game.getPlayer1().placeShip(corveta, celIni); // adiciona o navio ao array de navios do jogador
+                            //game.getPlayer1().getBoard().placeShip(corveta, celIni);
                             updateBoard(board1); //atualiza e pinta o tabuleiro
                         }
                     } catch (CelulaInvalidaException e){ //provavelmente erro relacionado a posicionar um navio em cima de outro
@@ -174,6 +176,7 @@ public class Controller {
                         if (sucessoPosicao){
                             submarino.setPosition(posicoesNavio);
                             game.getPlayer1().placeShip(submarino, celIni);
+                            //.getPlayer1().getBoard().placeShip(submarino, celIni);
                             updateBoard(board1);
                         }
                     } catch (CelulaInvalidaException e){
@@ -194,6 +197,7 @@ public class Controller {
                         if (sucessoPosicao){
                             fragata.setPosition(posicoesNavio);
                             game.getPlayer1().placeShip(fragata, celIni);
+                            //game.getPlayer1().getBoard().placeShip(fragata, celIni);
                             updateBoard(board1);
                         }
                     } catch (CelulaInvalidaException e){
@@ -214,6 +218,7 @@ public class Controller {
                         if (sucessoPosicao){
                             destroyer.setPosition(posicoesNavio);
                             game.getPlayer1().placeShip(destroyer, celIni);
+                            //game.getPlayer1().getBoard().placeShip(destroyer, celIni);
                             updateBoard(board1);
                         }
                     } catch (CelulaInvalidaException e){
@@ -258,12 +263,15 @@ public class Controller {
     //gerencia os usos do botão Destroyer (posicioná-lo e atacar com ele)
     public void handleCorveta() throws InterruptedException {
         boolean isAlive = true;
+        boolean excluido = true;
         List<Ship> ships = game.getPlayer1().getBoard().getShips();
         for (Ship ship : ships) {
             if (ship instanceof Corvette) {
                 isAlive = ship.isAlive();
+                excluido = false;
             }
         }
+        if (excluido){isAlive = false;}
         System.out.println(isAlive);
 
         if (estado.equals("clique")){
@@ -281,30 +289,36 @@ public class Controller {
             } else {
                 updateLabel("Você já posicionou sua Corveta");
             }
-        }if (!isAlive) {
-            updateLabel("Sua Corveta esta afundada!!!");
-            return;
         }
+
         if (estado.equals("selecionarAlvos")) {
-            if (alvosMiradosCorveta.isEmpty()){
-                updateLabel("Selecione os alvos da sua Corveta");
-                estado = "selecionarAlvosCorveta";
+            if (isAlive) {
+                if (alvosMiradosCorveta.isEmpty()){
+                    updateLabel("Selecione os alvos da sua Corveta");
+                    estado = "selecionarAlvosCorveta";
+                } else {
+                    updateLabel("Você já mirou com o seu Corveta");
+                }
             } else {
-                updateLabel("Você já mirou com o seu Corveta");
+                updateLabel("Sua Corveta esta afundada!!!");
             }
         }
+
 
     }
 
     //gerencia os usos do botão Submarino (posicioná-lo e atacar com ele)
     public void handleSubmarino(){
         boolean isAlive = true;
+        boolean excluido = true;
         List<Ship> ships = game.getPlayer1().getBoard().getShips();
         for (Ship ship : ships) {
             if (ship instanceof Submarine) {
                 isAlive = ship.isAlive();
+                excluido = false;
             }
         }
+        if (excluido){isAlive = false;}
         System.out.println(isAlive);
 
         if (estado.equals("clique")) {
@@ -321,36 +335,42 @@ public class Controller {
             } else {
                 updateLabel("Você já posicionou seu Submarino");
             }
-        }if (!isAlive) {
-            updateLabel("Seu Submarino esta afundado!!!");
-            return;
+        }
+
+        if (estado.equals("selecionarAlvos")) {
+            if (isAlive) {
+                if (alvosMiradosSubmarino.isEmpty()) {
+                    updateLabel("Selecione os alvos do seu Submarino");
+                    estado = "selecionarAlvosSubmarino";
+                } else {
+                    updateLabel("Você já mirou com o seu Submarino");
+                }
+            } else {
+                updateLabel("Seu Submarino esta afundado!!!");
+            }
 
         }
-        if (estado.equals("selecionarAlvos")) {
-            if (alvosMiradosSubmarino.isEmpty()) {
-                updateLabel("Selecione os alvos do seu Submarino");
-                estado = "selecionarAlvosSubmarino";
-            } else {
-                updateLabel("Você já mirou com o seu Submarino");
-            }
-        }
+
 
     }
 
     //gerencia os usos do botão Fragata (posicioná-lo e atacar com ele)
     public void handleFragata(){
         boolean isAlive = true;
+        boolean excluido = true;
         List<Ship> ships = game.getPlayer1().getBoard().getShips();
         for (Ship ship : ships) {
             if (ship instanceof Frigate) {
                 isAlive = ship.isAlive();
+                excluido = false;
             }
         }
+        if (excluido){isAlive = false;}
         System.out.println(isAlive);
 
         if (estado.equals("clique")) {
             boolean posicionado = false;
-            for (Ship c : game.getPlayer1().getShips()) {
+            for (Ship c : game.getPlayer1().getBoard().getShips()) {
                 if (c instanceof Frigate) {
                     posicionado = true;
                 }
@@ -362,31 +382,36 @@ public class Controller {
             } else {
                 updateLabel("Você já posicionou sua Fragata");
             }
-        }if (!isAlive) {
-            updateLabel("Sua Fragata esta afundada!!!");
-            return;
-
         }
+
         if (estado.equals("selecionarAlvos")) {
-            if (alvosMiradosFragata.isEmpty()) {
-                updateLabel("Selecione os alvos da sua Fragata");
-                estado = "selecionarAlvosFragata";
+            if (isAlive) {
+                if (alvosMiradosFragata.isEmpty()) {
+                    updateLabel("Selecione os alvos da sua Fragata");
+                    estado = "selecionarAlvosFragata";
+                } else {
+                    updateLabel("Você já mirou com o seu Fragata");
+                }
             } else {
-                updateLabel("Você já mirou com o seu Fragata");
+                updateLabel("Sua Fragata esta afundada!!!");
             }
         }
+
 
     }
 
     //gerencia os usos do botão Destroyer (posicioná-lo e atacar com ele)
     public void handleDestroyer(){
         boolean isAlive = true;
+        boolean excluido = true;
         List<Ship> ships = game.getPlayer1().getBoard().getShips();
         for (Ship ship : ships) {
             if (ship instanceof Destroyer) {
                 isAlive = ship.isAlive();
+                excluido = false;
             }
         }
+        if (excluido){isAlive = false;}
         System.out.println(isAlive);
 
         if (estado.equals("clique")) {
@@ -405,19 +430,22 @@ public class Controller {
                 updateLabel("Você já posicionou seu Destroyer");
             }
         }
-        if (!isAlive) {
-            updateLabel("Seu Destroyer esta afundado!!!");
-            return;
+
+        if (estado.equals("selecionarAlvos") ) {
+            if (isAlive) {
+                if (alvosMiradosDestroyer.isEmpty()) {
+                    updateLabel("Selecione os alvos do seu Destroyer");
+                    estado = "selecionarAlvosDestroyer";
+                } else {
+                    updateLabel("Você já mirou com o seu Destroyer");
+                }
+            } else {
+                updateLabel("Seu Destroyer esta afundado!!!");
+
+            }
 
         }
-        if (estado.equals("selecionarAlvos")) {
-            if (alvosMiradosDestroyer.isEmpty()) {
-                updateLabel("Selecione os alvos do seu Destroyer");
-                estado = "selecionarAlvosDestroyer";
-            } else {
-                updateLabel("Você já mirou com o seu Destroyer");
-            }
-        }
+
     }
 
 
@@ -440,11 +468,8 @@ public class Controller {
                 List<Ship> playerShips = game.getPlayer1().getBoard().getShips();
                 System.out.println("mirou com todos navios e vc tem " + playerShips.size() + "navios");
 
-
                 atiraMirados(boardComputer);
                 updateBoard(boardComputer);
-
-
 
                 // Lógica para dar a dica de posição seria por aqui
 
@@ -458,6 +483,7 @@ public class Controller {
                 alvosMiradosDestroyer.clear();
 
                 // lógica para o COMPUTADOR ATIRAR ficaria aq se pa
+                boardComputer.attListaNavios();
                 ataquePc();
 
             } else {
@@ -466,13 +492,21 @@ public class Controller {
 
             Board boardPlayer = game.getPlayer1().getBoard();
             Board boardPc = game.getPlayer2().getBoard();
+            Player jogador = game.getPlayer1(); Player computador = game.getPlayer2();
 
             boardPlayer.attListaNavios();
             boardPc.attListaNavios();
 
             updateLabel ("SEUS navios vivos: " + boardPlayer.getShips().size() + "    Navios do PC vivos: " + boardPc.getShips().size());
 
+            System.out.println("SEUS navios vivos: " + boardPlayer.getShips().size() + "    Navios do PC vivos: " + boardPc.getShips().size());
+            System.out.println("SEUS navios vivos: " + jogador.getShips().size() + "    Navios do PC vivos: " + computador.getShips().size());
 
+            if (boardPc.getShips().size() == 0){
+                updateLabel("PC PERDEU");
+                System.out.println("PC PERDEU");
+                estado = "endGame";
+            }
 
         }
     }
@@ -496,16 +530,22 @@ public class Controller {
                     board.hitCells(c.getRow(),c.getCol());
                     board.buscarCellNavio(c.getRow(),c.getCol());
 
-                    System.out.println("ATIRANDO " + c.getRow()+" "+c.getCol());
+                    //System.out.println("ATIRANDO " + c.getRow()+" "+c.getCol());
                 }
             }
-            //board.attListaNavios();
+            board.attListaNavios();
             updateBoard(board);
+            if (board.getShips().size() == 0){
+                updateLabel("PLAYER PERDEU");
+                System.out.println("PLAYER PERDEU");
+                estado = "endGame";
+            }
         }
     }
     //gerencia o uso do botão Começar Jogo!!
     private void handleStartGame() throws CelulaInvalidaException {
-        if (game.getPlayer1().getBoard().getShips().size() == 4){
+        System.out.println("tanto de navios: " + game.getPlayer1().getBoard().getShips().size());
+        if (game.getPlayer1().getBoard().getShips().size() == 4 && !estado.equals("endGame")){
             //posicionar navios do computador
             if(game.getPlayer2().getBoard().getShips().size() < 4) {
                 posicionaComputador();
@@ -515,8 +555,9 @@ public class Controller {
             label.setText("É o seu turno, faça seu(s) ataque(s)");
 
 
-        }
-        else label.setText("Voce ainda nao posicionou todos os navios!!!");
+        } else if (estado.equals("endGame")){
+
+        } else label.setText("Voce ainda nao posicionou todos os navios!!!");
 
     }
 
@@ -765,36 +806,21 @@ public class Controller {
                     if (cell.getAimed()){
                         cellNode.getStyleClass().add("cell-aimed");
                     } else {
-                        if (cell.getState() == CellButton.State.SHIP){
+                        if (cell.getState() == CellButton.State.SHIP && b == game.getPlayer1().getBoard()){
                             cellNode.getStyleClass().add("cell-ship");
                         }
                     }
 
                     if (cell.isHit()){
                         if (cell.getState() == CellButton.State.SHIP){
-                            System.out.println("UPDATEBOARD Célula x: " + cell.getCol() + " y: " + cell.getRow() + " Estado: " + cell.getState() + " isHit(): " + cell.isHit());
                             cellNode.getStyleClass().add("cell-ship-hit");
                             //cell.setState(CellButton.State.HIT);
                         } else if (cell.getState() == CellButton.State.WATER) {
-                            System.out.println("UPDATEBOARD Célula x: " + cell.getCol() + " y: " + cell.getRow() + " Estado: " + cell.getState() + " isHit(): " + cell.isHit());
                             cellNode.getStyleClass().add("cell-hit");
                             //cell.setState(CellButton.State.HIT);
                         }
                     }
 
-                    /*if (cell.getState() == CellButton.State.SHIP && !cell.getAimed()) {
-                        cellNode.getStyleClass().add("cell-ship");
-                    } else if (cell.getState() == CellButton.State.WATER && cell.isHit()) {
-                        System.out.println("UPDATEBOARD Célula x: " + cell.getCol() + " y: " + cell.getRow() + " Estado: " + cell.getState() + " isHit(): " + cell.isHit());
-                        cellNode.getStyleClass().add("cell-hit");
-                        cell.setState(CellButton.State.HIT);
-                    } else if (cell.getState() == CellButton.State.SHIP && cell.isHit()) {
-                        System.out.println("UPDATEBOARD Célula x: " + cell.getCol() + " y: " + cell.getRow() + " Estado: " + cell.getState() + " isHit(): " + cell.isHit());
-                        cellNode.getStyleClass().add("cell-ship-hit");
-                        cell.setState(CellButton.State.HIT);
-                    } else if (cell.getAimed()) {
-                        cellNode.getStyleClass().add("cell-aimed");
-                    }*/
                 }
             }
         }
