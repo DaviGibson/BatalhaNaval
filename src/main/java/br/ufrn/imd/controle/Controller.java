@@ -13,6 +13,7 @@ import javafx.scene.shape.Rectangle;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import org.apache.commons.math3.random.RandomDataGenerator;
 
 public class Controller {
 
@@ -519,10 +520,11 @@ public class Controller {
         List<CellButton> cellsAttk;
 
         for(int i = 0; i < quantosNavios; i++){
-            Random random = new Random();
+            //Random random = new Random();
+            RandomDataGenerator randomData = new RandomDataGenerator();
 
-            int fileira = random.nextInt(10);
-            int coluna = random.nextInt(10);
+            int fileira = randomData.nextInt(0, 9);
+            int coluna = randomData.nextInt(0, 9);
 
             cellsAttk = game.getPlayer2().getBoard().getShips().get(i).attack(fileira,coluna);
             for (CellButton c : cellsAttk){
@@ -569,8 +571,8 @@ public class Controller {
     }
 
     private void posicionaNaviosPc(int tamanho) throws CelulaInvalidaException {
-        Random random = new Random();
-        int virado = random.nextInt(tamanho);
+        RandomDataGenerator randomData = new RandomDataGenerator();
+        int virado = randomData.nextInt(0, 1);
 
 
         boolean sucessoPosicao;

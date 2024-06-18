@@ -4,6 +4,7 @@ module br.ufrn.imd.visao {
 
     requires com.almasb.fxgl.all;
     requires java.desktop;
+    requires commons.math3;
 
     opens br.ufrn.imd.visao to javafx.fxml;
     exports br.ufrn.imd.visao;
