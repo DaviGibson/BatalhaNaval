@@ -27,15 +27,24 @@ public abstract class Ship {
     public boolean isAlive() {
         int cellsHit = 0;
         for (CellButton cell : position) {
-            if (cell.getState() == CellButton.State.SHIP && cell.isHit()) {
+            if (cell.isHit()) {
                 cellsHit += 1;
             }
         }
-        if (cellsHit == position.size()){
+        if (cellsHit == position.size()) {
             isSunk = true;
             return false;
         }
         return true;
+    }
+
+    public CellButton buscaCell(int row, int col) {
+        for (CellButton cell : position) {
+            if (cell.getRow() == row && cell.getCol() == col) {
+                return cell;
+            }
+        }
+        return null;
     }
 
     public boolean isSunk() {

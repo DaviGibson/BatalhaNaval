@@ -18,7 +18,7 @@ public class Player {
     }
 
     public void takeTurn(int row, int col) {
-        board.hitCell(row, col);
+        board.hitCells(row, col);
     }
 
     public Board getBoard() {
