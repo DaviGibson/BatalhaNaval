@@ -17,10 +17,6 @@ public class Player {
         ships.add(ship);
     }
 
-    public void takeTurn(int row, int col) {
-        board.hitCells(row, col);
-    }
-
     public Board getBoard() {
         return board;
     }

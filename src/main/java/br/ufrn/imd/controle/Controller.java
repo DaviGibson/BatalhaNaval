@@ -26,11 +26,7 @@ public class Controller {
     @FXML
     private Button startGameButton;
     @FXML
-    private Button resetButton;
-    @FXML
     private Label label;
-    @FXML
-    private Button corveta;
 
 
     private Game game;
@@ -90,7 +86,6 @@ public class Controller {
         } else {
             board1 = game.getPlayer2().getBoard();
         }
-
         for (int row = 0; row < 10; row++) {
             for (int col = 0; col < 10; col++) {
                 Rectangle cell = new Rectangle (30,30);
@@ -106,7 +101,6 @@ public class Controller {
                 } else if (gridType.equals("computador")) {
                     //cell.getStyleClass().add("cell-computer");
                 }
-
                 cell.setOnMouseClicked(event -> {
                     try {
                         handleCellClick(event, gridType);
@@ -148,85 +142,93 @@ public class Controller {
                     updateLabel("Célula clicada em: [" + fileira + ", " + coluna + "] no grid: " + gridType);
                     break;
                 case "posicionarCorveta":
-                    updateLabel("Posicione sua Corveta");
-                    posicoesNavio.add(celIni); //inclui a célula clicada
-                    sucessoPosicao = adicionarPosicoesNavio(celIni, posicoesNavio, 2); // inclui as outras células do navio em função de seu tamanho e se está deitado ou de pé
-                    Ship corveta = new Corvette();
-                    try {
-                        if (sucessoPosicao){
-                            corveta.setPosition(posicoesNavio); //posiciona um navio, alterando seu State de WATER para SHIP
-                            game.getPlayer1().placeShip(corveta, celIni); // adiciona o navio ao array de navios do jogador
-                            //game.getPlayer1().getBoard().placeShip(corveta, celIni);
-                            updateBoard(board1); //atualiza e pinta o tabuleiro
+                    if (gridType.equals("jogador")){
+                        updateLabel("Posicione sua Corveta");
+                        posicoesNavio.add(celIni); //inclui a célula clicada
+                        sucessoPosicao = adicionarPosicoesNavio(celIni, posicoesNavio, 2); // inclui as outras células do navio em função de seu tamanho e se está deitado ou de pé
+                        Ship corveta = new Corvette();
+                        try {
+                            if (sucessoPosicao){
+                                corveta.setPosition(posicoesNavio); //posiciona um navio, alterando seu State de WATER para SHIP
+                                game.getPlayer1().placeShip(corveta, celIni); // adiciona o navio ao array de navios do jogador
+                                //game.getPlayer1().getBoard().placeShip(corveta, celIni);
+                                updateBoard(board1); //atualiza e pinta o tabuleiro
+                            }
+                        } catch (CelulaInvalidaException e){ //provavelmente erro relacionado a posicionar um navio em cima de outro
+                            desfazerNavio1(corveta);
+                            updateBoard(board1);
+                            updateLabel(e.getMessage());
+                            System.out.println(e.getMessage());
                         }
-                    } catch (CelulaInvalidaException e){ //provavelmente erro relacionado a posicionar um navio em cima de outro
-                        desfazerNavio1(corveta);
-                        updateBoard(board1);
-                        updateLabel(e.getMessage());
-                        System.out.println(e.getMessage());
                     }
                     estado = "clique";
                     break;
 
                 case "posicionarSubmarino":
-                    updateLabel("Posicione seu Submarino");
-                    posicoesNavio.add(celIni);
-                    sucessoPosicao = adicionarPosicoesNavio(celIni, posicoesNavio, 3); // Corveta tem tamanho 2
-                    Ship submarino = new Submarine();
-                    try {
-                        if (sucessoPosicao){
-                            submarino.setPosition(posicoesNavio);
-                            game.getPlayer1().placeShip(submarino, celIni);
-                            //.getPlayer1().getBoard().placeShip(submarino, celIni);
+                    if (gridType.equals("jogador")){
+                        updateLabel("Posicione seu Submarino");
+                        posicoesNavio.add(celIni);
+                        sucessoPosicao = adicionarPosicoesNavio(celIni, posicoesNavio, 3); // Corveta tem tamanho 2
+                        Ship submarino = new Submarine();
+                        try {
+                            if (sucessoPosicao){
+                                submarino.setPosition(posicoesNavio);
+                                game.getPlayer1().placeShip(submarino, celIni);
+                                //.getPlayer1().getBoard().placeShip(submarino, celIni);
+                                updateBoard(board1);
+                            }
+                        } catch (CelulaInvalidaException e){
+                            desfazerNavio1(submarino);
                             updateBoard(board1);
+                            updateLabel(e.getMessage());
+                            System.out.println(e.getMessage());
                         }
-                    } catch (CelulaInvalidaException e){
-                        desfazerNavio1(submarino);
-                        updateBoard(board1);
-                        updateLabel(e.getMessage());
-                        System.out.println(e.getMessage());
                     }
                     estado = "clique";
                     break;
 
                 case "posicionarFragata":
-                    updateLabel("Posicione sua Fragata");
-                    posicoesNavio.add(celIni);
-                    sucessoPosicao = adicionarPosicoesNavio(celIni, posicoesNavio, 4); // Corveta tem tamanho 2
-                    Ship fragata = new Frigate();
-                    try {
-                        if (sucessoPosicao){
-                            fragata.setPosition(posicoesNavio);
-                            game.getPlayer1().placeShip(fragata, celIni);
-                            //game.getPlayer1().getBoard().placeShip(fragata, celIni);
+                    if (gridType.equals("jogador")){
+                        updateLabel("Posicione sua Fragata");
+                        posicoesNavio.add(celIni);
+                        sucessoPosicao = adicionarPosicoesNavio(celIni, posicoesNavio, 4); // Corveta tem tamanho 2
+                        Ship fragata = new Frigate();
+                        try {
+                            if (sucessoPosicao){
+                                fragata.setPosition(posicoesNavio);
+                                game.getPlayer1().placeShip(fragata, celIni);
+                                //game.getPlayer1().getBoard().placeShip(fragata, celIni);
+                                updateBoard(board1);
+                            }
+                        } catch (CelulaInvalidaException e){
+                            desfazerNavio1(fragata);
                             updateBoard(board1);
+                            updateLabel(e.getMessage());
+                            System.out.println(e.getMessage());
                         }
-                    } catch (CelulaInvalidaException e){
-                        desfazerNavio1(fragata);
-                        updateBoard(board1);
-                        updateLabel(e.getMessage());
-                        System.out.println(e.getMessage());
                     }
                     estado = "clique";
                     break;
 
                 case "posicionarDestroyer":
-                    updateLabel("Posicione seu Destroyer");
-                    posicoesNavio.add(celIni);
-                    sucessoPosicao = adicionarPosicoesNavio(celIni, posicoesNavio, 5); // Corveta tem tamanho 2
-                    Ship destroyer = new Destroyer();
-                    try {
-                        if (sucessoPosicao){
-                            destroyer.setPosition(posicoesNavio);
-                            game.getPlayer1().placeShip(destroyer, celIni);
-                            //game.getPlayer1().getBoard().placeShip(destroyer, celIni);
+                    if (gridType.equals("jogador")){
+                        updateLabel("Posicione seu Destroyer");
+                        posicoesNavio.add(celIni);
+                        sucessoPosicao = adicionarPosicoesNavio(celIni, posicoesNavio, 5); // Corveta tem tamanho 2
+                        Ship destroyer = new Destroyer();
+                        try {
+                            if (sucessoPosicao){
+                                destroyer.setPosition(posicoesNavio);
+                                game.getPlayer1().placeShip(destroyer, celIni);
+                                //game.getPlayer1().getBoard().placeShip(destroyer, celIni);
+                                updateBoard(board1);
+                            }
+                        } catch (CelulaInvalidaException e){
+                            desfazerNavio1(destroyer);
                             updateBoard(board1);
+                            updateLabel(e.getMessage());
+                            System.out.println(e.getMessage());
                         }
-                    } catch (CelulaInvalidaException e){
-                        desfazerNavio1(destroyer);
-                        updateBoard(board1);
-                        updateLabel(e.getMessage());
-                        System.out.println(e.getMessage());
                     }
                     estado = "clique";
                     break;
@@ -507,6 +509,10 @@ public class Controller {
                 updateLabel("PC PERDEU");
                 System.out.println("PC PERDEU");
                 estado = "endGame";
+            } else if (boardPlayer.getShips().size() == 0){
+                updateLabel("PLAYER PERDEU");
+                System.out.println("PLAYER PERDEU");
+                estado = "endGame";
             }
 
         }
@@ -743,16 +749,6 @@ public class Controller {
     }
 
 
-    // Atualmente inútil
-    private void fazerPintura(List<CellButton> posicoesNavio) {
-        for (CellButton cell : posicoesNavio) {
-            Node cellNode = cell.getNode();
-            if (cellNode != null) {
-                cellNode.getStyleClass().add("cell-ship");
-            }
-        }
-    }
-
     //Criada para corrigir erros no posicionamento indevido de cêlulas num mapa
     private void desfazerPintura(List<CellButton> posicoesNavio) {
         System.out.println("Desfez?");
@@ -847,19 +843,5 @@ public class Controller {
     }
 
 
-    //atualmente inútil
-    @FXML
-    public void startGame() {
 
-        // Lógica para iniciar o jogo
-        //verifica se navios estão posicionados
-        //posiciona os navios do computador
-        //começa o jogo com o primeiro movimento sendo do jogador
-    }
-
-    //atualmente inútil
-    @FXML
-    public void resetGame() {
-        // Lógica para resetar o tabuleiro
-    }
 }
