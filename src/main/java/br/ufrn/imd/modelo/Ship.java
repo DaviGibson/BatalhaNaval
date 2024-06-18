@@ -5,7 +5,7 @@ import br.ufrn.imd.controle.CelulaInvalidaException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Ship {
+public abstract class Ship implements IShip{
     protected int size;
     protected List<CellButton> position;
     protected boolean isSunk;
