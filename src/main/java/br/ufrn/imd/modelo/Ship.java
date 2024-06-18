@@ -5,31 +5,55 @@ import br.ufrn.imd.controle.CelulaInvalidaException;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Ship implements IShip{
+/**
+ * Abstract class representing a ship in the game.
+ * Implements basic ship functionalities and defines abstract methods to be implemented by specific ship types.
+ */
+public abstract class Ship implements IShip {
+
+    /**
+     * Size of the ship (number of cells it occupies).
+     */
     protected int size;
+
+    /**
+     * List of CellButton objects representing the positions occupied by the ship.
+     */
     protected List<CellButton> position;
+
+    /**
+     * Boolean flag indicating if the ship is sunk.
+     */
     protected boolean isSunk;
 
+    /**
+     * Constructor initializing the ship with an empty position list and not sunk.
+     */
     public Ship() {
         this.position = new ArrayList<>();
         this.isSunk = false;
     }
 
-
-    // Possíveis exceções aqui: navio em cima de navio e navio fora do mapa
+    /**
+     * Places the ship on the game board by setting the state of its cells to SHIP.
+     */
     public void place() {
         for (CellButton cell : position) {
             cell.setState(CellButton.State.SHIP);
-
         }
     }
-// talvez mudar pro tabuleiro
+
+    /**
+     * Checks if the ship is still alive (not sunk).
+     *
+     * @return true if the ship is still alive, false otherwise.
+     */
     public boolean isAlive() {
         int cellsHit = 0;
         for (CellButton cell : position) {
             if (cell.isHit()) {
                 cellsHit += 1;
-                System.out.println("Celula " + cell.getCol() + " " + cell.getRow() + " Atingida: " + cell.isHit());
+                System.out.println("Cell " + cell.getCol() + " " + cell.getRow() + " Hit: " + cell.isHit());
             }
         }
         if (cellsHit == position.size()) {
@@ -39,6 +63,13 @@ public abstract class Ship implements IShip{
         return true;
     }
 
+    /**
+     * Finds a specific cell of the ship on the game board.
+     *
+     * @param row The row coordinate of the cell to find.
+     * @param col The column coordinate of the cell to find.
+     * @return The CellButton object representing the found cell, or null if not found.
+     */
     public CellButton buscaCell(int row, int col) {
         for (CellButton cell : position) {
             if (cell.getRow() == row && cell.getCol() == col) {
@@ -48,37 +79,63 @@ public abstract class Ship implements IShip{
         return null;
     }
 
+    /**
+     * Checks if the ship is sunk.
+     *
+     * @return true if the ship is sunk, false otherwise.
+     */
     public boolean isSunk() {
         return isSunk;
     }
 
+    /**
+     * Retrieves the size of the ship.
+     *
+     * @return The size of the ship.
+     */
     public int getSize() {
         return size;
     }
 
+    /**
+     * Retrieves the positions occupied by the ship on the game board.
+     *
+     * @return A list of CellButton objects representing the positions of the ship.
+     */
     public List<CellButton> getPosition() {
         return position;
     }
 
+    /**
+     * Sets the positions of the ship on the game board.
+     *
+     * @param position The list of CellButton positions where the ship will be placed.
+     * @throws CelulaInvalidaException If the ship overlaps with another ship on any cell.
+     */
     public void setPosition(List<CellButton> position) throws CelulaInvalidaException {
-        int sucessos = 0;
+        int successes = 0;
         for (CellButton cell : position) {
-            if (cell.getState() == CellButton.State.SHIP){
-                //System.out.println("a célula fileira:" + cell.getRow() + " e coluna:" + cell.getCol() + " deu erro");
-                throw new CelulaInvalidaException("Você tentou posicionar um navio numa célula onde outro navio já ocupa");
+            if (cell.getState() == CellButton.State.SHIP) {
+                throw new CelulaInvalidaException("You tried to place a ship on a cell already occupied by another ship.");
             } else {
-                //System.out.println("a célula fileira:" + cell.getRow() + " e coluna:" + cell.getCol() + " deu bom");
-                sucessos++;
+                successes++;
             }
         }
-        if (sucessos == size){
+        if (successes == size) {
             this.position = position;
-            for (CellButton c : position){
+            for (CellButton c : position) {
                 c.setState(CellButton.State.SHIP);
             }
         }
     }
 
+    /**
+     * Abstract method to be implemented by subclasses.
+     * Defines the behavior of the ship when it attacks.
+     *
+     * @param row The row coordinate to attack.
+     * @param col The column coordinate to attack.
+     * @return A list of CellButton objects representing the attacked cells.
+     */
     abstract public List<CellButton> attack(int row, int col);
 }
-

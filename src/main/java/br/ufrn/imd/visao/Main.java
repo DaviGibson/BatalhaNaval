@@ -8,7 +8,18 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Classe principal que inicializa a aplicação Batalha Naval.
+ */
 public class Main extends Application {
+
+    /**
+     * Método principal que inicia a aplicação JavaFX.
+     *
+     * @param stage o palco principal da aplicação onde a cena será exibida.
+     * @throws IOException se ocorrer um erro ao carregar o arquivo FXML.
+     * @throws IllegalStateException se o arquivo FXML não for encontrado.
+     */
     @Override
     public void start(Stage stage) throws IOException {
         // Use o caminho correto para o arquivo FXML que está no mesmo pacote
@@ -39,6 +50,11 @@ public class Main extends Application {
         stage.show();
     }
 
+    /**
+     * Método principal que inicia a aplicação.
+     *
+     * @param args argumentos de linha de comando (não são usados neste contexto).
+     */
     public static void main(String[] args) {
         launch(args);
     }
